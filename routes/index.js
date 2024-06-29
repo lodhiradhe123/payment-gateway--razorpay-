@@ -32,5 +32,15 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.post('/api/payment/verify',(req,res, next) => {
+  const razorpayOrderId = req.body.razorpay_order_id
+  const razorpayPaymentId=req.body.razorpay_payment_id
+  const signature = req.body.razorpay_signature;
+
+  var { validatePaymentVerification } = require('./dist/utils/razorpay-utils');
+ return res.send(validatePaymentVerification ({"order_id": razorpayOrderId, "payment_id": razorpayPaymentId }, signature, secret));
+
+})
+
 
 module.exports = router;

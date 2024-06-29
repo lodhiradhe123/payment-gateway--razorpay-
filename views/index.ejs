@@ -20,7 +20,9 @@
 
     <!--  -->
 
+    <!-- //jquery CDN search from google -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
     <script>
       var orderId;
       $(document).ready(function () {
@@ -38,20 +40,39 @@
 
         //creates new orderId everytime
         $.ajax(settings).done(function (response) {
-          // orderId = response.id;
-          // console.log(orderId);
+
+          orderId = response.id;
+          console.log(orderId);
+
           var options = {
             key: "rzp_test_mGuw0I4erKCe2c", // Enter the Key ID generated from the Dashboard
             amount: response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             currency: response.currency,
-            name: "Acme Corp",
+            name: "company name",
             description: "thank you for shopping !",
             image: "https://example.com/your_logo", //company logo url
             order_id: response.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             handler: function (response) {
-              alert(response.razorpay_payment_id);
-              alert(response.razorpay_order_id);
-              alert(response.razorpay_signature);
+              // alert(response.razorpay_payment_id);
+              // alert(response.razorpay_order_id);
+              // alert(response.razorpay_signature);
+              $.ajax(settings1).done(function (response) {
+                if(response==true){
+                  window.location.href = "/success";
+                }else{
+                  alert("payment failled")
+                }
+
+                var settings1 = {
+                  url: "/api/payment/verify",
+                  method: "POST",
+                  timeout: 0,
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  data: JSON.stringify({ response }),
+                };
+              })
             },
             prefill: {
               name: "Gaurav Kumar",
